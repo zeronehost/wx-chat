@@ -1,22 +1,25 @@
 # wx-chat
 
 #### Description
+
+![](./robot.svg)
+
 微信聊天机器人
 
 #### Software Architecture
-Software architecture description
+
+Based on WeChat web interface
 
 #### Installation
 
-1. xxxx
-2. xxxx
-3. xxxx
+1. git clone https://gitee.com/zeronehost/wx-chat.git
+2. cd wx-chat
+3. go run ./src/main.go
 
 #### Instructions
 
-1. xxxx
-2. xxxx
-3. xxxx
+1. go run main.go
+2. Generate qrcode.png QR code image in the project src directory, scan code login
 
 #### Contribution
 

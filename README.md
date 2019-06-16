@@ -1,23 +1,27 @@
 # wx-chat
 
 #### 介绍
+
+![](./robot.svg)
+
 微信聊天机器人
 
 #### 软件架构
-软件架构说明
+
+基于微信web版接口实现
 
 
 #### 安装教程
 
-1. xxxx
-2. xxxx
-3. xxxx
+1. git clone https://gitee.com/zeronehost/wx-chat.git
+2. cd wx-chat
+3. go run ./src/main.go
 
 #### 使用说明
 
-1. xxxx
-2. xxxx
-3. xxxx
+1. go run main.go
+2. 在项目src目录下生成qrcode.png二维码图片，扫码登录
+3. 开始愉快的聊天了
 
 #### 参与贡献
 
