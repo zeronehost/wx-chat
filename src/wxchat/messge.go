@@ -79,6 +79,7 @@ func (wx *WxChat) SendTextMsg(content string, to string) (bool, error) {
 	}
 
 	if resp.BaseResponse.Ret != 0 {
+		wx.logger.Error("Send Msg Error. [msgId]:" + msgId)
 		return false, errors.New("Send Msg Error. [msgId]:" + msgId)
 	}
 
@@ -124,6 +125,7 @@ func (wx *WxChat) SendImgMsg(toUserFrom string, mediaId string) error {
 	}
 
 	if resp.BaseResponse.Ret != 0 {
+		wx.logger.Error("Send Img Msg Error. [msgId]:" + msgId)
 		return errors.New("Send Img Msg Error. [msgId]:" + msgId)
 	}
 
@@ -176,6 +178,7 @@ func (wx *WxChat) SendAppMsg(toUserName string, mediaId string, filename string,
 	}
 
 	if resp.BaseResponse.Ret != 0 {
+		wx.logger.Error("Send Img Msg Error. [msgId]:" + msgId)
 		return errors.New("Send App Msg Error. [msgId]:" + msgId)
 	}
 
@@ -258,7 +261,7 @@ func (wx *WxChat) UploadMedia(buf []byte, mediaType MediaType, fileType string, 
 			return resp.MediaId, nil
 		}
 	}
-
+	wx.logger.Error("UploadMedia Error")
 	return "", errors.New("UploadMedia Error")
 }
 
@@ -298,6 +301,7 @@ func (wx *WxChat) VerifyUser(userName string, ticket string, verifyUserContent s
 	}
 
 	if resp.BaseResponse.Ret != 0 {
+		wx.logger.Error("VerifyUser Error")
 		return errors.New("VerifyUser Error")
 	}
 

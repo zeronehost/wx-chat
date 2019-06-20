@@ -230,7 +230,7 @@ func (wx *WxChat) contactsModify(cts []map[string]interface{}) error {
 		userNamesStr += newContact["UserName"].(string) + ", "
 	}
 
-	wx.logger.Info("Contacts Modify. UserNames: " + userNamesStr)
+	wx.logger.Notice("Contacts Modify. UserNames: " + userNamesStr)
 
 	return wx.updateContact(userNames)
 }
@@ -243,6 +243,26 @@ func (wx *WxChat) contactsDelete(cts []map[string]interface{}) {
 		userNamesStr += contact["UserName"].(string) + ", "
 	}
 
-	wx.logger.Info("Contacts Delete. UserNames: " + userNamesStr)
+	wx.logger.Notice("Contacts Delete. UserNames: " + userNamesStr)
 
+}
+
+// 查找联系人userName
+func (wx *WxChat) SearchContact(remarkName string) (string, error) {
+	userName := ""
+	for k, v := range wx.contacts {
+		if v.RemarkName == remarkName {
+			userName = k
+			break
+		}
+	}
+	if userName == "" {
+		wx.logger.Error("未找到该联系人")
+		return "", errors.New("未找到该联系人")
+	}
+	return userName, nil
+}
+
+func (wx *WxChat) GetRemarkName(userName string) string {
+	return wx.contacts[userName].RemarkName
 }

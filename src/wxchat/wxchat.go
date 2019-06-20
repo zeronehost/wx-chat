@@ -26,8 +26,6 @@ func NewWxChat(storageFilePath string, logger *logs.Logger) *WxChat {
 		filePath: storageFilePath,
 	}
 
-	//logger := logs.NewLogger()
-
 	return &WxChat{
 		httpClient: &httpClient{},
 		storage:    &storage,

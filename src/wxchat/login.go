@@ -91,6 +91,7 @@ func (wx *WxChat) getUuid() (string, error) {
 
 	uuidArr := reg.FindSubmatch([]byte(content))
 	if len(uuidArr) != 2 {
+		wx.logger.Error("Uuid get failed")
 		return "", errors.New("Uuid get failed")
 	}
 
@@ -184,6 +185,7 @@ func (wx *WxChat) pushLogin() (string, error) {
 	}
 
 	if pushLoginResp.Ret != "0" || "" == pushLoginResp.Uuid {
+		wx.logger.Error("Push Login Failed")
 		return "", errors.New("Push Login Failed")
 	}
 
