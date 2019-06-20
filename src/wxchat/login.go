@@ -28,7 +28,7 @@ func (wx *WxChat) beginLogin() error {
 		}
 
 		wx.triggerGenUuidEvent(wx.Uuid)
-		wx.logger.Println("[Info] Uuid=" + wx.Uuid)
+		wx.logger.Info("Uuid=" + wx.Uuid)
 		err = wx.GetLoginQrcode(wx.Uuid)
 		if err != nil {
 			return err
@@ -38,21 +38,21 @@ func (wx *WxChat) beginLogin() error {
 		for {
 			status, result, err := wx.isAuth(tip)
 			if err != nil {
-				wx.logger.Println("[Error] GetRedirectUrl Error :" + err.Error())
+				wx.logger.Error("GetRedirectUrl Error :" + err.Error())
 				time.Sleep(time.Second * time.Duration(1))
 				continue
 			}
 
 			if 200 == status {
 				redirectUrl = result
-				wx.logger.Println("[Info] Redirect=" + redirectUrl)
+				wx.logger.Info("Redirect=" + redirectUrl)
 				wx.triggerConfirmAuthEvent(redirectUrl)
 				break
 			}
 
 			if 201 == status {
 				tip = 0
-				wx.logger.Println("[Info] Scan Code")
+				wx.logger.Info("Scan Code")
 				wx.triggerScanCodeEvent(result)
 			}
 		}
@@ -66,7 +66,7 @@ func (wx *WxChat) beginLogin() error {
 		wx.storage.setData(wx.Uuid, wx.baseRequest, wx.passTicket, wx.httpClient.Cookies, wx.host)
 	}
 
-	wx.logger.Println("[Info] Login.")
+	wx.logger.Info("Login.")
 	wx.triggerLoginEvent(wx.baseRequest.DeviceID)
 
 	return nil

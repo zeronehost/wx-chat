@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"wxchat"
 )
 
@@ -15,7 +14,7 @@ var (
 )
 
 func main() {
-	wx := wxchat.NewWxChat("./db.json", os.Stdout)
+	wx := wxchat.NewWxChat("./db.json")
 	MessageListener(wx)
 	err := wx.Login()
 	if err != nil {
@@ -76,7 +75,7 @@ func cmd(wx *wxchat.WxChat, msg string) error {
 	if addFlag || delFlag {
 		var names = "当前自动应答好友\n"
 		for name := range nameList {
-			names = fmt.Sprintf("%s,%s", names, name)
+			names = fmt.Sprintf("%s|%s", names, name)
 		}
 		_, err = wx.SendTextMsg(names, "filehelper")
 	}

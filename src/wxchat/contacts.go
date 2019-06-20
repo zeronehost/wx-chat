@@ -230,7 +230,7 @@ func (wx *WxChat) contactsModify(cts []map[string]interface{}) error {
 		userNamesStr += newContact["UserName"].(string) + ", "
 	}
 
-	wx.logger.Println("[Info] Contacts Modify. UserNames: " + userNamesStr)
+	wx.logger.Info("Contacts Modify. UserNames: " + userNamesStr)
 
 	return wx.updateContact(userNames)
 }
@@ -243,6 +243,6 @@ func (wx *WxChat) contactsDelete(cts []map[string]interface{}) {
 		userNamesStr += contact["UserName"].(string) + ", "
 	}
 
-	wx.logger.Println("[Info] Contacts Delete. UserNames: " + userNamesStr)
+	wx.logger.Info("Contacts Delete. UserNames: " + userNamesStr)
 
 }
