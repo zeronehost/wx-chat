@@ -1,9 +1,9 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"wxchat"
+	logs "wxchat/log"
 )
 
 var (
@@ -14,15 +14,16 @@ var (
 )
 
 func main() {
-	wx := wxchat.NewWxChat("./db.json")
+	logger := logs.NewLogger()
+	wx := wxchat.NewWxChat("./db.json", logger)
 	MessageListener(wx)
 	err := wx.Login()
 	if err != nil {
-		fmt.Println(err.Error())
+		logger.Error(err.Error())
 	}
 	err = wx.Run()
 	if err != nil {
-		fmt.Println(err.Error())
+		logger.Error(err.Error())
 	}
 }
 
@@ -36,14 +37,11 @@ func MessageListener(wx *wxchat.WxChat) {
 					cmdFlag = true
 				}
 				if cmdFlag {
-					b, _ := json.Marshal(eventData)
-					fmt.Println(string(b))
 					_ = cmd(wx, eventData.Content)
 				}
 				if "over" == eventData.Content {
 					cmdFlag = false
 				}
-				//fmt.Println(eventData.Content)
 			}
 			if nameList[eventData.SenderUserInfo.RemarkName] && wxchat.TextMessage == eventData.MessageType {
 				_, _ = wx.SendTextMsg("[自动回复]对方暂时不想理你，等会再说(^_^)", eventData.SenderUserInfo.UserName)

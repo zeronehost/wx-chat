@@ -109,7 +109,7 @@ func (logger *Logger) DefaultLogFormatFunc(logType LogType, i interface{}) (stri
 	formatTime := time.Now().Format(layout)
 
 	if len(formatTime) != len(layout) {
-		fmt.Println(len(layout) - len(formatTime))
+		//fmt.Println(len(layout) - len(formatTime))
 		formatTime += ".000"[4-(len(layout)-len(formatTime)) : 4]
 	}
 	values := make([]interface{}, 3)

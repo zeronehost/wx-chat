@@ -21,12 +21,12 @@ type WxChat struct {
 }
 
 // New A WxChat
-func NewWxChat(storageFilePath string) *WxChat {
+func NewWxChat(storageFilePath string, logger *logs.Logger) *WxChat {
 	storage := storage{
 		filePath: storageFilePath,
 	}
 
-	logger := logs.NewLogger()
+	//logger := logs.NewLogger()
 
 	return &WxChat{
 		httpClient: &httpClient{},
