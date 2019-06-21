@@ -50,7 +50,7 @@ func (wx *WxChat) init() error {
 	}
 
 	if initRes.Response.BaseResponse.Ret != 0 {
-		wx.logger.Println("[Error] Init Failed. Res.Ret=" + string(initRes.Response.BaseResponse.Ret))
+		wx.logger.Error("Init Failed. Res.Ret=" + string(initRes.Response.BaseResponse.Ret))
 		return errors.New("Init Failed")
 	}
 

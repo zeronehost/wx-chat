@@ -67,14 +67,14 @@ func (wx *WxChat) beginListen() error {
 		hosts[3] = "wx2.qq.com"
 	}
 
-	wx.logger.Println("[Info] Being Listen ... ")
+	wx.logger.Info("Being Listen ... ")
 
 	listenFailedCount := 0
 	for {
 		_, selector, err := wx.listen()
 		if err != nil {
 			listenFailedCount++
-			wx.logger.Println("[Error] Listen Failed. Msg:" + err.Error() + fmt.Sprintf(", ListenFailedCount=%d.", listenFailedCount))
+			wx.logger.Error("Listen Failed. Msg:" + err.Error() + fmt.Sprintf(", ListenFailedCount=%d.", listenFailedCount))
 			wx.triggerListenFailedEvent(listenFailedCount, wx.host)
 		} else {
 			listenFailedCount = 0
@@ -87,7 +87,7 @@ func (wx *WxChat) beginListen() error {
 			for continueFlag != 0 {
 				resp, err := wx.sync()
 				if err != nil {
-					wx.logger.Println("[Error] Sync Failed. Msg:" + err.Error())
+					wx.logger.Error("Sync Failed. Msg:" + err.Error())
 					continue
 				}
 				continueFlag = resp.ContinueFlag

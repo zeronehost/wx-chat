@@ -2,9 +2,7 @@ package wxchat
 
 import (
 	"fmt"
-	"io"
-	"log"
-	"os"
+	logs "wxchat/log"
 )
 
 type WxChat struct {
@@ -18,20 +16,15 @@ type WxChat struct {
 	contacts    map[string]*Contact
 	httpClient  *httpClient
 	storage     *storage
-	logger      *log.Logger
+	logger      *logs.Logger
 	listeners   map[EventType]func(Event)
 }
 
 // New A WxChat
-func NewWxChat(storageFilePath string, logFile io.Writer) *WxChat {
+func NewWxChat(storageFilePath string, logger *logs.Logger) *WxChat {
 	storage := storage{
 		filePath: storageFilePath,
 	}
-
-	if logFile == nil {
-		logFile = os.Stdout
-	}
-	logger := log.New(logFile, "", log.Ldate|log.Ltime)
 
 	return &WxChat{
 		httpClient: &httpClient{},
@@ -63,7 +56,7 @@ func (wx *WxChat) Login() error {
 	}
 
 	wx.triggerInitEvent(wx.me)
-	wx.logger.Println("[Info] WxChat Init.")
+	wx.logger.Info("WxChat Init.")
 
 	err = wx.initContact()
 	if err != nil {
@@ -71,7 +64,7 @@ func (wx *WxChat) Login() error {
 	}
 
 	wx.triggerContactsInitEvent(len(wx.contacts))
-	wx.logger.Println("[Info] Contacts Init.")
+	wx.logger.Info("Contacts Init.")
 
 	return nil
 }

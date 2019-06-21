@@ -482,7 +482,7 @@ func (wx *WxChat) triggerMessageEvent(msg map[string]interface{}) {
 		},
 	}
 
-	wx.logger.Println("[Info] Get Message. SenderNickName=[" + senderUserInfo.NickName + "], Content=[" + content + "]")
+	wx.logger.Notice("Get Message. SenderNickName=[" + senderUserInfo.NickName + "], Content=[" + content + "]")
 	listener, isReg := wx.listeners[MESSAGE_EVENT]
 	if isReg {
 		listener(event)

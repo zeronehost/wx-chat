@@ -1,29 +1,29 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 	"wxchat"
+	logs "wxchat/log"
 )
 
 var (
 	cmdFlag  = false
 	addFlag  = false
 	delFlag  = false
-	nameList = make(map[string]bool)
+	nameList = map[string]bool{}
 )
 
 func main() {
-	wx := wxchat.NewWxChat("./db.json", os.Stdout)
+	logger := logs.NewLogger()
+	wx := wxchat.NewWxChat("./db.json", logger)
 	MessageListener(wx)
 	err := wx.Login()
 	if err != nil {
-		fmt.Println(err.Error())
+		logger.Error(err.Error())
 	}
 	err = wx.Run()
 	if err != nil {
-		fmt.Println(err.Error())
+		logger.Error(err.Error())
 	}
 }
 
@@ -37,18 +37,13 @@ func MessageListener(wx *wxchat.WxChat) {
 					cmdFlag = true
 				}
 				if cmdFlag {
-					b, _ := json.Marshal(eventData)
-					fmt.Println(string(b))
 					_ = cmd(wx, eventData.Content)
 				}
 				if "over" == eventData.Content {
 					cmdFlag = false
 				}
-				//fmt.Println(eventData.Content)
-			}
-			if nameList[eventData.SenderUserInfo.RemarkName] && wxchat.TextMessage == eventData.MessageType {
+			} else if nameList[eventData.SenderUserInfo.UserName] && wxchat.TextMessage == eventData.MessageType {
 				_, _ = wx.SendTextMsg("[自动回复]对方暂时不想理你，等会再说(^_^)", eventData.SenderUserInfo.UserName)
-
 			}
 		}
 	})
@@ -57,7 +52,7 @@ func MessageListener(wx *wxchat.WxChat) {
 func cmd(wx *wxchat.WxChat, msg string) error {
 	var err error = nil
 	if "cmd" == msg {
-		_, err = wx.SendTextMsg("1. 添加自动应答好友\n2. 删除自动应答好友\n", "filehelper")
+		_, err = wx.SendTextMsg("1. 添加自动应答好友\n2. 删除自动应答好友\n3. 已添加的好友", "filehelper")
 	} else if "over" == msg {
 		_, err = wx.SendTextMsg("操作结束", "filehelper")
 	} else if "1" == msg {
@@ -68,17 +63,32 @@ func cmd(wx *wxchat.WxChat, msg string) error {
 		delFlag = true
 		addFlag = false
 		_, err = wx.SendTextMsg("请输入删除自动应答好友的备注名", "filehelper")
-	} else if addFlag {
-		nameList[msg] = true
-	} else if delFlag {
-		delete(nameList, msg)
-	}
-	if addFlag || delFlag {
-		var names = "当前自动应答好友\n"
-		for name := range nameList {
-			names = fmt.Sprintf("%s,%s", names, name)
+	} else if "3" == msg {
+		var names = "当前添加的好友有\n"
+		if len(nameList) > 0 {
+			for name := range nameList {
+				names = fmt.Sprintf("%s|%s", names, wx.GetRemarkName(name))
+			}
+		} else {
+			names = "当前未添加任何好友"
 		}
+
 		_, err = wx.SendTextMsg(names, "filehelper")
+	} else if addFlag {
+		userName, err := wx.SearchContact(msg)
+		if err != nil {
+			_, err = wx.SendTextMsg(err.Error(), "filehelper")
+		} else {
+			nameList[userName] = true
+		}
+
+	} else if delFlag {
+		userName, err := wx.SearchContact(msg)
+		if err != nil {
+			_, err = wx.SendTextMsg(err.Error(), "filehelper")
+		} else {
+			delete(nameList, userName)
+		}
 	}
 
 	return err
