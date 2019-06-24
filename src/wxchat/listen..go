@@ -144,7 +144,6 @@ func (wx *WxChat) listen() (string, string, error) {
 			return code, selector, nil
 		}
 	}
-
 	return "", "0", errors.New("Code != 0")
 }
 

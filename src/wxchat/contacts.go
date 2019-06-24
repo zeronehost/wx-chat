@@ -247,6 +247,33 @@ func (wx *WxChat) contactsDelete(cts []map[string]interface{}) {
 
 }
 
+type Info struct {
+	UserName    string
+	NickName    string
+	RemarkName  string
+	Sex         float64
+	DisplayName string
+	Type        ContactType
+}
+
+func (wx *WxChat) AllContact() map[string]*Info {
+
+	var list = map[string]*Info{}
+
+	for k, v := range wx.contacts {
+		list[k] = &Info{
+			RemarkName:  v.RemarkName,
+			UserName:    v.UserName,
+			Type:        v.Type,
+			NickName:    v.NickName,
+			Sex:         v.Sex,
+			DisplayName: v.DisplayName,
+		}
+	}
+
+	return list
+}
+
 // 查找联系人userName
 func (wx *WxChat) SearchContact(remarkName string) (string, error) {
 	userName := ""
